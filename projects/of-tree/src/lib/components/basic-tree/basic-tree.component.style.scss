@@ -1,0 +1,68 @@
+:host {
+    height: 100%;
+    display: block;
+    position: relative;
+}
+:host ::ng-deep .vt-container {
+    min-width: auto;
+}
+
+.of-node {
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+}
+
+.of-expander {
+    margin-left: -1.5rem;
+    width: 1.5rem;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.5rem;
+}
+
+.of-icon {
+    width: 1.5rem;
+    text-align: center;
+    line-height: 1.5rem;
+    color: #888;
+
+    &.fa-folder,
+    &.fa-folder-open {
+        color: #f1a847;
+    }
+}
+.of-title {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    flex: 1 1 100%;
+}
+.of-label {
+    white-space: nowrap;
+    padding: 0 0.25rem;
+    line-height: 1.5rem;
+    &:hover {
+        background: #c9def5;
+    }
+}
+
+.of-highlight {
+    outline: solid 1px orange;
+}
+
+.of-dragoverlay {
+    position: absolute;
+    background: #c9def5;
+    left: 0;
+    width: 100%;
+    &.of-dragoverlay-between:before {
+        content: '';
+        height: 2px;
+        margin-top: -1px;
+        top: 50%;
+        width: 100%;
+        background: #6899ce;
+        position: absolute;
+    }
+}

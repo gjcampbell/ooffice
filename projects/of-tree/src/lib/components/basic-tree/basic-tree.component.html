@@ -1,0 +1,33 @@
+<of-virtual-tree class="ui-tree" [itemHeight]="itemHeight" [model]="model">
+    <ng-template let-node>
+        <div
+            class="of-node"
+            [style.paddingLeft.rem]="1.5 * (node.depth + 1)"
+            [style.height.px]="itemHeight"
+            [ofSetAttrs]="getDomNodeAttr(node)"
+            (contextmenu)="handleContextMenu($event, node.item)"
+        >
+            <i
+                *ngIf="model.isExpandable(node.item) && !isFiltered"
+                (click)="model.toggle(node.item)"
+                [class]="getExpanderIcon(node.item)"
+            ></i>
+            <div
+                class="of-node-title"
+                [draggable]="canDrag(node.item)"
+                (dragstart)="handleDragstart($event, node)"
+                (click)="handleRowClick($event, node.item)"
+            >
+                <i [class]="getIcon(node)" (click)="iconClick.emit({ event: $event, item: node.item })"></i>
+                <div
+                    class="of-label"
+                    (click)="labelClick.emit({ event: $event, item: node.item })"
+                    [class.of-highlight]="model.isHighlighted(node.item)"
+                >
+                    {{ getName(node.item) }}
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div #dragOverlay tree-before class="of-dragoverlay" [style.display]="isDraggingOver ? 'block' : 'none'"></div>
+</of-virtual-tree>
