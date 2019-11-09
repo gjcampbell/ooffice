@@ -1,21 +1,21 @@
 import { Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, OnDestroy, ElementRef, HostListener } from '@angular/core';
-import { OfVirtualTree, OfTreeConfig, VtVirtualTreeComponent } from '../virtual-tree';
+import { VirtualTree, TreeConfig, VirtualTreeComponent } from '../virtual-tree';
 import { Node } from '../../models';
 
-export interface VtItemState<T> {
+export interface ItemState<T> {
     isExpanded: (item: T) => boolean;
     isSelected: (item: T) => boolean;
     isHighlighted: (item: T) => boolean;
     isLoading: (item: any) => boolean;
 }
 
-export interface VtBasicTreeConfig<T> extends OfTreeConfig<T> {
+export interface BasicTreeConfig<T> extends TreeConfig<T> {
     filterThrottle: number;
     filterTextMinLength: number;
     itemIcon: string;
-    getIcon(item: T, node: Node<T>, state: VtItemState<T>): string;
-    getName(item: T, state: VtItemState<T>): string;
-    getDomNodeAttr(item: T, node: Node<T>, state: VtItemState<T>): { [attr: string]: any } | undefined;
+    getIcon(item: T, node: Node<T>, state: ItemState<T>): string;
+    getName(item: T, state: ItemState<T>): string;
+    getDomNodeAttr(item: T, node: Node<T>, state: ItemState<T>): { [attr: string]: any } | undefined;
     canDrag(item: T): boolean;
     canDrop(args: DragArgs<T>): boolean;
     move(args: DragArgs<T>): Promise<void>;
@@ -37,7 +37,7 @@ interface DragArgs<T> {
     templateUrl: `./basic-tree.component.html`,
     styleUrls: [`./basic-tree.component.style.scss`]
 })
-export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
+export class BasicTreeComponent implements AfterViewInit, OnDestroy {
     private disposers: (() => void)[] = [];
     private filterTextThrottle: any;
     private _filterText: string | undefined = '';
@@ -50,8 +50,8 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
         isSelected: (item: any) => this.model.isSelected(item),
         isHighlighted: (item: any) => this.model.isHighlighted(item),
         isLoading: (item: any) => this.isItemLoading(item)
-    }) as VtItemState<any>;
-    private _model: OfVirtualTree<any>;
+    }) as ItemState<any>;
+    private _model: VirtualTree<any>;
     private _config = {
         childAccessor: (item: any) => this.getChildren(item),
         getIcon: (item: any) =>
@@ -66,11 +66,11 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
         canDrop: () => false,
         move: () => Promise.resolve(),
         getDragData: () => '{}'
-    } as VtBasicTreeConfig<any>;
+    } as BasicTreeConfig<any>;
     private hostBox?: ClientRect;
 
-    @ViewChild(VtVirtualTreeComponent)
-    public tree!: VtVirtualTreeComponent;
+    @ViewChild(VirtualTreeComponent)
+    public tree!: VirtualTreeComponent;
 
     @Output()
     public selectionChange = new EventEmitter<any>();
@@ -108,10 +108,10 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
     }
 
     @Input()
-    public set config(value: Partial<VtBasicTreeConfig<any>>) {
+    public set config(value: Partial<BasicTreeConfig<any>>) {
         this.childAccessor = value.childAccessor || this.childAccessor;
         this._config = { ...this._config, ...value, childAccessor: this.config.childAccessor };
-        this.model.updateConfig(this.config);
+        this.model.updateConfig(this._config);
     }
     public get config() {
         return this._config;
@@ -122,7 +122,7 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
     }
 
     @Input()
-    public set model(value: OfVirtualTree<any>) {
+    public set model(value: VirtualTree<any>) {
         this._model = value;
         this.bindModelEvents();
     }
@@ -144,7 +144,7 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
     }
 
     constructor(private host: ElementRef<HTMLElement>) {
-        this._model = new OfVirtualTree<any>(this.config);
+        this._model = new VirtualTree<any>(this.config);
         this.bindModelEvents();
         this.itemHeight = 1.5 * parseFloat(window.getComputedStyle(document.body).fontSize || '16');
     }

@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import * as C from './components';
 
 @NgModule({
-    declarations: [C.OfVirtualTreeComponent, C.OfBasicTreeComponent, C.SetAttrsDirective],
+    declarations: [C.VirtualTreeComponent, C.BasicTreeComponent, C.SetAttrsDirective],
     imports: [CommonModule],
-    exports: [C.OfVirtualTreeComponent, C.OfBasicTreeComponent]
+    exports: [C.VirtualTreeComponent, C.BasicTreeComponent]
 })
 export class OfVirtualTreeModule {}

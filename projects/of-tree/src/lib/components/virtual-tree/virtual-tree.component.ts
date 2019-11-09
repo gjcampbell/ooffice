@@ -11,7 +11,7 @@ import {
     ElementRef,
     AfterViewInit
 } from '@angular/core';
-import { OfVirtualTree } from './virtual-tree.model';
+import { VirtualTree } from './virtual-tree.model';
 import { VirtualRenderArea } from '../../models';
 
 @Component({
@@ -48,9 +48,9 @@ import { VirtualRenderArea } from '../../models';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OfVirtualTreeComponent implements OnDestroy, AfterViewInit {
+export class VirtualTreeComponent implements OnDestroy, AfterViewInit {
     private disposers: (() => void)[] = [];
-    private _model!: OfVirtualTree<any>;
+    private _model!: VirtualTree<any>;
     private renderArea = new VirtualRenderArea();
 
     @HostBinding('tabIndex')
@@ -62,7 +62,7 @@ export class OfVirtualTreeComponent implements OnDestroy, AfterViewInit {
     public template!: TemplateRef<any>;
 
     @Input()
-    public set model(value: OfVirtualTree<any>) {
+    public set model(value: VirtualTree<any>) {
         this._model = value;
         this.listenForDataChange(value);
     }
@@ -182,7 +182,7 @@ export class OfVirtualTreeComponent implements OnDestroy, AfterViewInit {
         }
     }
 
-    private listenForDataChange(model: OfVirtualTree<any>) {
+    private listenForDataChange(model: VirtualTree<any>) {
         this.dispose();
         const subscription = model.onDataInvalidated.subscribe(() => this.handleDataChange());
         this.disposers.push(() => subscription.unsubscribe());

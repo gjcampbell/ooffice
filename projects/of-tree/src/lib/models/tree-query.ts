@@ -240,7 +240,7 @@ export class TreeQuery<T> implements Iterable<Node<T>> {
     }
 }
 
-export class TreeConfig<T> {
+export class TreeQueryConfig<T> {
     constructor(public readonly childAccessor?: (item: T) => T[] | undefined, public eagerLoad = true) {}
     public query(items: T[]) {
         return TreeQuery.init<T>(items, this.childAccessor, this.eagerLoad);

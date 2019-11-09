@@ -1,4 +1,4 @@
-import { OfVirtualTree } from './virtual-tree.model';
+import { VirtualTree } from './virtual-tree.model';
 
 interface Item {
     id: number;
@@ -7,11 +7,11 @@ interface Item {
 
 describe('OfVirtualTree', () => {
     const createVt = (data: Item[]) => {
-            const result = new OfVirtualTree<Item>({ childAccessor: (item: Item) => item.children });
+            const result = new VirtualTree<Item>({ childAccessor: (item: Item) => item.children });
             result.load(data);
             return result;
         },
-        navigate = (vt: OfVirtualTree<Item>, ...directions: string[]) => {
+        navigate = (vt: VirtualTree<Item>, ...directions: string[]) => {
             const result: (number | undefined)[] = [];
             for (const dir of directions) {
                 vt.navigate(dir);

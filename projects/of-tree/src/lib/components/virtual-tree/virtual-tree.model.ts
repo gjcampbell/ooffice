@@ -1,13 +1,13 @@
 import { EventEmitter } from '@angular/core';
-import { Node, TreeQuery, TreeConfig } from '../../models';
+import { Node, TreeQuery, TreeQueryConfig } from '../../models';
 
-export interface OfTreeConfig<ItemType> {
+export interface TreeConfig<ItemType> {
     canExpand?: (item: ItemType) => boolean;
     childAccessor?: (item: ItemType) => ItemType[] | undefined;
     lazyLoad?: boolean;
 }
 
-export class OfVirtualTree<ItemType> {
+export class VirtualTree<ItemType> {
     private expandedItems = new Set<ItemType>();
     private highlighted?: ItemType;
     private selectedItem?: ItemType;
@@ -24,15 +24,15 @@ export class OfVirtualTree<ItemType> {
         return this._query;
     }
 
-    constructor(private config: OfTreeConfig<ItemType>, query?: TreeQuery<ItemType>) {
+    constructor(private config: TreeConfig<ItemType>, query?: TreeQuery<ItemType>) {
         if (query) {
             this._query = query;
         } else {
-            this._query = new TreeConfig<ItemType>(this.config.childAccessor, !this.config.lazyLoad).query([]);
+            this._query = new TreeQueryConfig<ItemType>(this.config.childAccessor, !this.config.lazyLoad).query([]);
         }
     }
 
-    public updateConfig(value: OfTreeConfig<ItemType>) {
+    public updateConfig(value: TreeConfig<ItemType>) {
         this.config = value;
     }
 
@@ -238,7 +238,7 @@ export class OfVirtualTree<ItemType> {
      * @param items Data to load
      */
     public load(items: ItemType[]) {
-        this._query = new TreeConfig<ItemType>(this.config.childAccessor, !this.config.lazyLoad).query(items);
+        this._query = new TreeQueryConfig<ItemType>(this.config.childAccessor, !this.config.lazyLoad).query(items);
         this.invalidateData();
     }
 
