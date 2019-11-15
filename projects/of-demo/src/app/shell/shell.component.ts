@@ -4,13 +4,14 @@ import { Component, OnInit } from '@angular/core';
     selector: 'app-shell',
     template: `
         <app-site-nav></app-site-nav>
+        <app-site-content></app-site-content>
     `,
     styles: [
         `
             :host {
-                display: flex;
+                display: grid;
                 height: 100%;
-                align-items: stretch;
+                grid-template-columns: 60px auto;
             }
         `
     ]

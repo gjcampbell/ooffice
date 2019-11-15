@@ -58,7 +58,7 @@ export class BasicTreeComponent implements AfterViewInit, OnDestroy {
             item.type !== 'Folder' ? item.icon || this.config.itemIcon : this.model.isExpanded(item) ? 'folder-open' : 'folder',
         getName: (item: any) => item.name,
         getDomNodeAttr: () => undefined,
-        itemIcon: 'file-text',
+        itemIcon: 'file',
         filterThrottle: 500,
         filterTextMinLength: 2,
         lazyLoad: true,
@@ -193,7 +193,7 @@ export class BasicTreeComponent implements AfterViewInit, OnDestroy {
 
     public getExpanderIcon(item: any) {
         const iconType = this.model.isExpanded(item) ? 'down' : 'right';
-        return `fa fa-caret-${iconType}`;
+        return `of-expander fa fa-caret-${iconType}`;
     }
 
     public handleDragstart(evt: DragEvent, node: Node<any>) {

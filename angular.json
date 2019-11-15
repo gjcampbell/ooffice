@@ -54,7 +54,11 @@
                         "main": "projects/of-demo/src/main.ts",
                         "polyfills": "projects/of-demo/src/polyfills.ts",
                         "tsConfig": "projects/of-demo/tsconfig.app.json",
-                        "assets": ["projects/of-demo/src/favicon.ico", "projects/of-demo/src/assets"],
+                        "assets": [
+                            "projects/of-demo/src/favicon.ico",
+                            "projects/of-demo/src/assets",
+                            { "glob": "**/*", "input": "./node_modules/ngx-monaco-editor/assets/monaco", "output": "./assets/monaco/" }
+                        ],
                         "styles": ["projects/of-demo/src/app/design/theme.scss", "projects/of-demo/src/styles.scss"],
                         "scripts": []
                     },

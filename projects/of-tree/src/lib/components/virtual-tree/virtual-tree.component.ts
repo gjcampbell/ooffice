@@ -18,8 +18,8 @@ import { VirtualRenderArea } from '../../models';
     selector: 'of-virtual-tree',
     template: `
         <ng-content select="[tree-before]"></ng-content>
-        <div class="vt-bottom-space" [style.top.px]="totalHeight"></div>
-        <div class="vt-container" [style.top.px]="topBuffer">
+        <div class="of-bottom-space" [style.top.px]="totalHeight"></div>
+        <div class="of-container" [style.top.px]="topBuffer">
             <ng-template ngFor [ngForOf]="visibleItems" [ngForTemplate]="template"></ng-template>
         </div>
         <ng-content select="[tree-after]"></ng-content>
@@ -33,14 +33,14 @@ import { VirtualRenderArea } from '../../models';
                 overflow: auto;
                 position: relative;
             }
-            .vt-container {
+            .of-container {
                 min-width: 100%;
             }
-            .vt-container,
-            .vt-bottom-space {
+            .of-container,
+            .of-bottom-space {
                 position: absolute;
             }
-            .vt-bottom-space {
+            .of-bottom-space {
                 width: 1px;
                 height: 1px;
             }

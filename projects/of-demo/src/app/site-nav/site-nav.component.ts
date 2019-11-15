@@ -1,9 +1,10 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
+import { EndpointItem, Endpoints } from './site-nav';
 
 @Component({
     selector: 'app-site-nav',
     template: `
-        <a *ngFor="let item of links" matRipple [matTooltip]="item.name" [href]="'#' + item.link"
+        <a *ngFor="let item of links" matRipple matTooltipPosition="right" [matTooltip]="item.name" [href]="'#' + item.link"
             ><i [attr.class]="'fa fa-' + item.icon"></i
         ></a>
     `,
@@ -21,22 +22,15 @@ import { Component, OnInit, HostBinding } from '@angular/core';
         `
     ]
 })
-export class SiteNavComponent {
-    protected links = [
-        {
-            name: 'what',
-            link: 'blah',
-            icon: 'folder'
-        },
-        {
-            name: 'dude',
-            link: 'ok',
-            icon: 'bath'
-        }
-    ];
+export class SiteNavComponent implements OnInit {
+    protected links: EndpointItem[];
 
     @HostBinding('attr.class')
     protected hostClass = 'mat-toolbar mat-primary';
 
     constructor() {}
+
+    public ngOnInit() {
+        this.links = Endpoints.get().getAll();
+    }
 }
