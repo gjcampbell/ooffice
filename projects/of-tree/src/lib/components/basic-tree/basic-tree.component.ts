@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, OnDestroy, ElementRef, HostListener } from '@angular/core';
-import { OfVirtualTree, OfTreeConfig, VtVirtualTreeComponent } from '../virtual-tree';
+import { OfVirtualTree, OfTreeConfig, OfVirtualTreeComponent } from '../virtual-tree';
 import { Node } from '../../models';
 
 export interface VtItemState<T> {
@@ -69,8 +69,8 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
     } as VtBasicTreeConfig<any>;
     private hostBox?: ClientRect;
 
-    @ViewChild(VtVirtualTreeComponent)
-    public tree!: VtVirtualTreeComponent;
+    @ViewChild(OfVirtualTreeComponent)
+    public tree!: OfVirtualTreeComponent;
 
     @Output()
     public selectionChange = new EventEmitter<any>();
