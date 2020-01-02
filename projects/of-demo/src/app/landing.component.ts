@@ -8,7 +8,7 @@ import { Node } from 'of-tree';
     <app-loading [show]="loading">Downloading Lots of Data</app-loading>
     <div class="page">
         <div class="text">
-            <h1>A tree <i class="fa fa-tree"></i></h1>
+            <h1>A tree 🥦</h1>
             <p>On the right is a virtualized tree listing all the files under <strong>node_modules</strong> for a regular angular project. So many files, right?</p>
             <p>This is the <span class="snippet">of-tree</span>. You can get it for your angular project from NPM.</p>
             <p><a href="https://github.com/gjcampbell/ooffice/tree/master/projects/of-tree">Here's</a> the source code.</p>
