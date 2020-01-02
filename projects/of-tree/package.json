@@ -8,6 +8,7 @@
       "type": "git",
       "url": "https://github.com/gjcampbell/ooffice.git"
   },
+  "homepage": "https://github.com/gjcampbell/ooffice/tree/master/projects/of-tree",
   "author": {
       "name": "gjcampbell",
       "url": "https://github.com/gjcampbell"
