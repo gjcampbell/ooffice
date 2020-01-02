@@ -22,6 +22,12 @@ export interface VtBasicTreeConfig<T> extends OfTreeConfig<T> {
     getDragData(item: T): string;
 }
 
+export enum DefaultIcons {
+    file = 'of-file-text',
+    folder = 'of-folder',
+    folderOpen = 'of-folder-open'
+}
+
 type DragPos = 'before' | 'on' | 'after';
 
 interface DragArgs<T> {
@@ -55,10 +61,10 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
     private _config = {
         childAccessor: (item: any) => this.getChildren(item),
         getIcon: (item: any) =>
-            item.type !== 'Folder' ? item.icon || this.config.itemIcon : this.model.isExpanded(item) ? 'folder-open' : 'folder',
+            (item.type !== 'd' && item.type !== 'Folder') ? item.icon || this.config.itemIcon : this.model.isExpanded(item) ? DefaultIcons.folderOpen : DefaultIcons.folder,
         getName: (item: any) => item.name,
         getDomNodeAttr: () => undefined,
-        itemIcon: 'file-text',
+        itemIcon: DefaultIcons.file,
         filterThrottle: 500,
         filterTextMinLength: 2,
         lazyLoad: true,
@@ -180,7 +186,7 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
     }
 
     public getIcon(node: Node<any>) {
-        return `of-icon fa fa-${this.config.getIcon!(node.item, node, this.stateProvider)}`;
+        return `of-icon ${this.config.getIcon!(node.item, node, this.stateProvider)}`;
     }
 
     public getDomNodeAttr(node: Node<any>) {
@@ -193,7 +199,7 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
 
     public getExpanderIcon(item: any) {
         const iconType = this.model.isExpanded(item) ? 'down' : 'right';
-        return `fa fa-caret-${iconType}`;
+        return `of-expander of-expander-${iconType}`;
     }
 
     public handleDragstart(evt: DragEvent, node: Node<any>) {

@@ -6,11 +6,13 @@ import { OfVirtualTreeModule } from 'of-tree';
 import { AppSettingsService } from './services/AppSettingsService';
 import { OofficeDemoService } from './services/OofficeDemoService';
 import { LandingComponent } from './landing.component';
+import { LoadingComponent } from './components/design/loading.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LandingComponent
+    LandingComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
