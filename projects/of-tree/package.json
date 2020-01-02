@@ -1,6 +1,11 @@
 {
   "name": "of-tree",
   "version": "0.0.1",
+  "license": "MIT",
+  "author": {
+      "name": "gjcampbell",
+      "url": "https://github.com/gjcampbell"
+  },
   "peerDependencies": {
     "@angular/common": "^7.1.0",
     "@angular/core": "^7.1.0"
