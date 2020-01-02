@@ -23,6 +23,7 @@
                     class="of-label"
                     (click)="labelClick.emit({ event: $event, item: node.item })"
                     [class.of-highlight]="model.isHighlighted(node.item)"
+                    [class.of-selected]="model.isSelected(node.item)"
                 >
                     {{ getName(node.item) }}
                 </div>

@@ -8,3 +8,15 @@ body, html, app-root {
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
 }
+
+.serif {
+    font-family: 'Gelasio', serif;
+}
+.snippet {
+    font-family: 'Ubuntu Mono', monospace;
+    background: #0002;
+    color: #000e;
+}
+.ms {
+
+}
