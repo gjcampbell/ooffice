@@ -2,10 +2,6 @@
 
 This is a virtual tree for angular 2+. It has excellent performance for 10s of thousands of items, supports search, expand/collapse all, templating, drag and drop, lazy load, keyboard navigation.
 
-## Install
-
-`npm i of-tree` obviously
-
 ## Features
 - **Configurability** - *Easy out-of-the-box settings can be easily overridden to support exotic scenarios*
 - **Keyboard Navigation** - *Supports standard arrow-key tree behavior*
@@ -16,6 +12,19 @@ This is a virtual tree for angular 2+. It has excellent performance for 10s of t
 - **Lazy load** - *Easily minimize data requests by loading child nodes on demand, by depth and ancestry*
 - **Drag and Drop** - *Reparent nodes by dragging*
 - **Navigate To** - *Expand and scroll immediately to any item in the tree, any depth*
+
+## How does it work?
+
+This tree component supports a huge number of nodes with minimal performance impact to the app hosting it. It does this by virtualizing the view of nodes, so that only the nodes visible in a scrollable container are rendered. However, virtualizing a hierarchical data structure is complicated. If the DOM structure were rendered hierarchically like the data, then it could not be virtualized. So, the data must be flattened before it is virtualized. Now, if the data is just flattened, then we the information about the depth and relationships of the hierarchical data is lost. So, before flattening the data, the metadata describing the relationships of the data must be stored.
+
+So, a good recipe to support a hierarchical data view of a lot of data is:
+1. Store hierarchy metadata
+1. Flatten the data
+1. Virtualize, render only visible items
+
+## Install
+
+`npm i of-tree` obviously
 
 ## Quick Setup
 
