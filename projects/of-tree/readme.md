@@ -4,6 +4,7 @@ This is a virtual tree for angular 2+. It has excellent performance for 10s of t
 
 ## Features
 - **Configurability** - *Easy out-of-the-box settings can be easily overridden to support exotic scenarios*
+- **No Dependencies** - *This is built on Angular alone, no other libraries needed*
 - **Keyboard Navigation** - *Supports standard arrow-key tree behavior*
 - **Search** - *Immediate or throttled, text or faceted search of a huge number of nodes*
 - **Expand/Collapse All** - *Expand all instantly even on 10s of thousands of nodes*
