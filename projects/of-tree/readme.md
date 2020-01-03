@@ -13,6 +13,11 @@ This is a virtual tree for angular 2+. It has excellent performance for 10s of t
 - **Drag and Drop** - *Reparent nodes by dragging*
 - **Navigate To** - *Expand and scroll immediately to any item in the tree, any depth*
 
+## More Info
+
+- [Demo Site](https://oofficestorage.z19.web.core.windows.net/)
+- [Documentation Site](https://oofficestorage.z19.web.core.windows.net/)
+
 ## How does it work?
 
 This tree component supports a huge number of nodes with minimal performance impact to the app hosting it. It does this by virtualizing the view of nodes, so that only the nodes visible in a scrollable container are rendered. However, virtualizing a hierarchical data structure is complicated. If the DOM structure were rendered hierarchically like the data, then it could not be virtualized. So, the data must be flattened before it is virtualized. Now, if the data is just flattened, then we the information about the depth and relationships of the hierarchical data is lost. So, before flattening the data, the metadata describing the relationships of the data must be stored.
@@ -66,11 +71,6 @@ interface IMyDataType {
 ```
 
 For the most minimal setup expects, provide data with known properties, and put the tree inside a container of a non-zero height. However, the tree is very configurable. It has a robust public API and allows detailed configuration.
-
-## More Info
-
-- [Demo Site](https://oofficestorage.z19.web.core.windows.net/)
-- [Documentation Site](https://oofficestorage.z19.web.core.windows.net/)
 
 ## Browser Support
 
