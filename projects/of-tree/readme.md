@@ -17,7 +17,7 @@ This is a virtual tree for angular 2+. It has excellent performance for 10s of t
 
 This tree component supports a huge number of nodes with minimal performance impact to the app hosting it. It does this by virtualizing the view of nodes, so that only the nodes visible in a scrollable container are rendered. However, virtualizing a hierarchical data structure is complicated. If the DOM structure were rendered hierarchically like the data, then it could not be virtualized. So, the data must be flattened before it is virtualized. Now, if the data is just flattened, then we the information about the depth and relationships of the hierarchical data is lost. So, before flattening the data, the metadata describing the relationships of the data must be stored.
 
-So, a good recipe to support a hierarchical data view of a lot of data is:
+To summarize, this tree is built around this recipe (which works for any hierarchical data view):
 1. Store hierarchy metadata
 1. Flatten the data
 1. Virtualize, render only visible items
