@@ -4,7 +4,10 @@ import { AppSettingsService } from './services/AppSettingsService';
 @Component({
   selector: 'app-root',
   template: `
-    <ng-container *ngIf="ready"><app-landing></app-landing></ng-container>
+    <ng-container *ngIf="ready">
+        <app-show-off-tree></app-show-off-tree>
+        <app-golden-tree></app-golden-tree>
+    </ng-container>
     <ng-container *ngIf="!ready">loading</ng-container>`
 })
 export class AppComponent implements OnInit {
