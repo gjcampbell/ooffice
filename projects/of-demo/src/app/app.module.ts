@@ -1,19 +1,21 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { OfVirtualTreeModule } from 'of-tree';
 import { AppSettingsService } from './services/AppSettingsService';
 import { OofficeDemoService } from './services/OofficeDemoService';
-import { LandingComponent } from './landing.component';
-import { LoadingComponent } from './components/design/loading.component';
+import * as Components from './components';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LandingComponent,
-    LoadingComponent
+    Components.GoldenTreeComponent,
+    Components.GoldenTreeLineComponent,
+    Components.LoadingComponent,
+    Components.ShowOffTreeComponent,
+    Components.ToolbarComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ITreeItem, OofficeDemoService } from './services/OofficeDemoService';
+import { ITreeItem, OofficeDemoService } from '../../services/OofficeDemoService';
 import { Node } from 'of-tree';
 
 @Component({
-  selector: 'app-landing',
+  selector: 'app-show-off-tree',
   template: `
     <app-loading [show]="loading">Downloading Lots of Data</app-loading>
     <div class="page">
         <div class="text">
-            <h1>A tree 🥦</h1>
+            <h1>🥦 of-basic-tree</h1>
             <p>On the right is a virtualized tree listing all the files under <strong>node_modules</strong> for a regular angular project. So many files, right?</p>
             <p>This is the <span class="snippet">of-tree</span>. You can get it for your angular project from NPM.</p>
             <p><a href="https://github.com/gjcampbell/ooffice/tree/master/projects/of-tree">Here's</a> the source code.</p>
@@ -26,7 +26,7 @@ import { Node } from 'of-tree';
                 <of-basic-tree #tree [config]="config" [filterText]="filterText" [(selection)]="selected" [data]="treeData"></of-basic-tree>
             </div>
             <p>Selected Path: {{getPath(tree.model.getTreeNode(selected))}}</p>
-            <p>Total Items: <strong>{{tree.model.query.count()}}</strong></p>
+            <p>Total Items: <strong>{{tree.model.query.count().toLocaleString()}}</strong></p>
         </div>
     </div>`,
   styles: [
@@ -80,7 +80,7 @@ import { Node } from 'of-tree';
     `
   ]
 })
-export class LandingComponent implements OnInit {
+export class ShowOffTreeComponent implements OnInit {
     public loading: boolean = false;
 
     public treeData: ITreeItem[] = [];
