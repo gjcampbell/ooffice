@@ -22,7 +22,8 @@ import { Node, OfVirtualTree } from 'of-tree';
                 <li><code>canExpand</code> a function accepting MyDataType, returning a bool indicating whether the item can be expanded, e.g., <code>(item: MyDataType) => item.isFolder ? true : false</code></li>
                 <li><code>childAccessor</code> a function accepting MyDataType, returning undefined or an array or MyDataType, e.g., <code>(item: MyDataType) => item.subItems</code></li>
             </ol>
-            <p>In the ng-template, add elements representing a single tree node</p>
+            <p>In the ng-template, add elements representing a single tree node, based on the <code>let-node</code> variable.</p>
+            <a href="https://github.com/gjcampbell/ooffice/blob/master/projects/of-demo/src/app/components/pages/golden-tree.component.ts">View example on github</a>
         </div>
         <div class="tree">
             <div class="tree-container">
@@ -61,11 +62,19 @@ import { Node, OfVirtualTree } from 'of-tree';
         grid-template-columns: 50% 50%;
     }
     .text {
-        color: #228b22;
+    }
+    code {
+        padding-inline-start: .5rem;
+        padding-inline-end: .5rem;
+        background: #0402;
+        padding: 0.125rem 0;
     }
     p {
         font-size: .875rem;
         color: #000c;
+    }
+    li {
+        line-height: 1.5rem;
     }
     h1 {
         font-size: 4rem;
