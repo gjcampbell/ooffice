@@ -8,7 +8,7 @@ import { Node, OfVirtualTree } from 'of-tree';
     <app-loading [show]="loading">Downloading Lots of Data</app-loading>
     <div class="page">
         <div class="text">
-            <h1><span class="broccoli">🥦</span> <span class="stroke-text">templating</span></h1>
+            <h1><span class="broccoli">🥦</span> templating</h1>
             <p>Just look at those old-school tree connector lines on that tree. Trees these days ain't like they used to be.</p>
             <p class="important">For total flexibility of appearance and behavior, use an <code>of-virtual-tree</code></p>
             <p>Minimal setup for a <code>&lt;of-virtual-tree [model]="model" [itemHeight]="25"&gt;&lt;/of-virtual-tree&gt;</code></p>
