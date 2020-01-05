@@ -18,7 +18,7 @@ import * as Components from './components';
     Components.ToolbarComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     FormsModule,
     OfVirtualTreeModule
   ],
