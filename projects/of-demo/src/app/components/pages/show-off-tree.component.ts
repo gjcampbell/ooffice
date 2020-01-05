@@ -27,6 +27,7 @@ import { Node } from 'of-tree';
             </div>
             <p>Selected Path: {{getPath(tree.model.getTreeNode(selected))}}</p>
             <p>Total Items: <strong>{{tree.model.query.count().toLocaleString()}}</strong></p>
+            <a href="https://github.com/gjcampbell/ooffice/blob/master/projects/of-demo/src/app/components/pages/show-off-tree.component.ts">View example on github</a>
         </div>
     </div>`,
   styles: [
