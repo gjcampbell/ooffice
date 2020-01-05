@@ -9,7 +9,7 @@
         "lint": "ng lint",
         "e2e": "ng e2e",
         "typedoc": "typedoc --json dist/apidocs.json --tsconfig projects/of-tree/tsconfig.lib.json",
-        "parse-ts": "ts-node --project .\\tools.tsconfig.json .\\tools\\ts-doc-parser.ts"
+        "tool-ts": "ts-node --project .\\tools.tsconfig.json"
     },
     "private": true,
     "dependencies": {
