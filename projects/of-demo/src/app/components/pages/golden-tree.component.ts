@@ -154,7 +154,7 @@ import { Node, OfVirtualTree } from 'of-tree';
         color: #D60000b0;
     }
     h1 {
-        color: #228b22;
+        color: #FFA101;
     }
     .important {
         font-size: 1.125rem;
