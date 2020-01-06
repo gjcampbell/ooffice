@@ -39,7 +39,7 @@ import { AppSettingsService } from '../../services/AppSettingsService';
                             {{ node.item.children.length }}
                         </div>
                         <div class="col-3">
-                            <a *ngIf="isPackage(node)" target="_blank" [attr.href]="'https://www.npmjs.com/package/' + node.item.name"
+                            <a *ngIf="isPackage(node)" target="_blank" [attr.href]="'https://www.npmjs.com/package/' + getPackagePath(node)"
                                 ><i class="fa fa-external-link-alt"></i
                             ></a>
                         </div>
@@ -141,15 +141,22 @@ export class GoldenTreeComponent extends DemoBaseComponent {
     }
 
     public isPackage(node: Node<ITreeItem>) {
-        return node.depth === 0 && node.item.name !== '.bin';
+        return (
+            (node.depth === 0 && node.item.name !== '.bin' && !node.item.name.startsWith('@')) ||
+            (node.depth === 1 && node.parent.item.name.startsWith('@'))
+        );
     }
 
     public isFolder(node: Node<ITreeItem>) {
-        return (node.depth > 0 || node.item.name === '.bin') && node.item.type === 'd';
+        return !this.isPackage(node) && node.item.type === 'd';
     }
 
     public isFile(item: ITreeItem) {
         return item.type === 'f';
+    }
+
+    public getPackagePath(node: Node<ITreeItem>) {
+        return node.depth === 1 ? node.parent.item.name + '/' + node.item.name : node.item.name;
     }
 
     private async load() {
