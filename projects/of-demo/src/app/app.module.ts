@@ -9,20 +9,16 @@ import { OofficeDemoService } from './services/OofficeDemoService';
 import * as Components from './components';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    Components.GoldenTreeComponent,
-    Components.GoldenTreeLineComponent,
-    Components.LoadingComponent,
-    Components.ShowOffTreeComponent,
-    Components.ToolbarComponent,
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    OfVirtualTreeModule
-  ],
-  providers: [AppSettingsService, OofficeDemoService],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        Components.GoldenTreeComponent,
+        Components.GoldenTreeLineComponent,
+        Components.LoadingComponent,
+        Components.ShowOffTreeComponent,
+        Components.ToolbarComponent
+    ],
+    imports: [BrowserModule, FormsModule, OfVirtualTreeModule],
+    providers: [AppSettingsService, OofficeDemoService],
+    bootstrap: [Components.GoldenTreeComponent, Components.ShowOffTreeComponent]
 })
-export class AppModule { }
+export class AppModule {}

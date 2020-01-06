@@ -7,7 +7,9 @@
         "build": "ng build",
         "test": "ng test",
         "lint": "ng lint",
-        "e2e": "ng e2e"
+        "e2e": "ng e2e",
+        "typedoc": "typedoc --json dist/apidocs.json --tsconfig projects/of-tree/tsconfig.lib.json",
+        "parse-ts": "ts-node --project .\\tools.tsconfig.json .\\tools\\ts-doc-parser.ts"
     },
     "private": true,
     "dependencies": {
@@ -30,10 +32,11 @@
         "@angular/cli": "~7.1.0",
         "@angular/compiler-cli": "~7.1.0",
         "@angular/language-service": "~7.1.0",
-        "@types/node": "~8.9.4",
         "@types/jasmine": "~2.8.8",
         "@types/jasminewd2": "~2.0.3",
+        "@types/node": "~8.9.4",
         "codelyzer": "~4.5.0",
+        "esm": "^3.2.25",
         "jasmine-core": "~2.99.1",
         "jasmine-spec-reporter": "~4.2.1",
         "karma": "~3.1.1",
@@ -47,6 +50,7 @@
         "tsickle": ">=0.29.0",
         "tslib": "^1.9.0",
         "tslint": "~5.11.0",
+        "typedoc": "^0.15.6",
         "typescript": "~3.1.6"
     },
     "prettier": {
