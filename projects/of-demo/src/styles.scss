@@ -1,0 +1,27 @@
+@import 'prettify-overrides';
+
+/* You can add global styles to this file, and also import other style files */
+body,
+html,
+app-root {
+    height: 100%;
+    width: 100%;
+    color: #000e;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.app-component {
+    background: #fff;
+    padding: 1rem 1.5rem;
+    border: solid 5px #0002;
+    max-width: 800px;
+    box-shadow: 0 0 8px #0008 inset;
+}
+
+.page {
+    margin: auto;
+    padding: 0.5in 1in;
+    max-width: 11in;
+}
