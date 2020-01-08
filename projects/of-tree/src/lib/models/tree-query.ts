@@ -179,6 +179,9 @@ export class TreeQuery<T> implements Iterable<Node<T>> {
         return result;
     }
 
+    /**
+     * @ignore
+     */
     public [Symbol.iterator](): Iterator<Node<T>> {
         return this.iterate();
     }

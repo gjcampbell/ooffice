@@ -53,11 +53,20 @@ export class OfVirtualTreeComponent implements OnDestroy, AfterViewInit {
     private _model!: OfVirtualTree<any>;
     private renderArea = new VirtualRenderArea();
 
+    /**
+     * @ignore
+     */
     @HostBinding('tabIndex')
     public tabIndex = 0;
 
+    /**
+     * @ignore
+     */
     public visibleItems: any[] = [];
 
+    /**
+     * @ignore
+     */
     @ContentChild(TemplateRef)
     public template!: TemplateRef<any>;
 
@@ -75,25 +84,40 @@ export class OfVirtualTreeComponent implements OnDestroy, AfterViewInit {
         this.renderArea.itemHeight = value;
     }
 
+    /**
+     * @ignore
+     */
     public get topBuffer() {
         return this.renderArea.topBuffer;
     }
 
+    /**
+     * @ignore
+     */
     public get totalHeight() {
         return this.renderArea.totalHeight;
     }
 
     constructor(private cdr: ChangeDetectorRef, private element: ElementRef<HTMLDivElement>) {}
 
+    /**
+     * @ignore
+     */
     public ngAfterViewInit() {
         this.handleDataChange();
         this.invalidateSize();
         this.syncScrollPos();
     }
+    /**
+     * @ignore
+     */
     public ngOnDestroy() {
         this.dispose();
     }
 
+    /**
+     * @ignore
+     */
     @HostListener('keydown', ['$event'])
     public handleKeydown(evt: KeyboardEvent) {
         if (evt.key === 'Enter') {
@@ -109,6 +133,9 @@ export class OfVirtualTreeComponent implements OnDestroy, AfterViewInit {
         }
     }
 
+    /**
+     * @ignore
+     */
     @HostListener('scroll')
     public handleScrollChange() {
         if (this.element.nativeElement) {
@@ -117,6 +144,9 @@ export class OfVirtualTreeComponent implements OnDestroy, AfterViewInit {
         }
     }
 
+    /**
+     * @ignore
+     */
     @HostListener('window:resize')
     public handleWindowResize() {
         this.invalidateSize();

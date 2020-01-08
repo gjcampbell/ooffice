@@ -1,3 +1,6 @@
+/**
+ * Node wraps each item in a hierarchy of data, providing relationship info about the items place in the hierarchy
+ */
 export class Node<T> {
     private _next?: Node<T>;
     private _childrenAccessor: () => Node<T>[];
@@ -9,6 +12,9 @@ export class Node<T> {
     public get next() {
         return this._next;
     }
+    /**
+     * Check whether lazy loaded children have been loaded
+     */
     public get childrenLoaded() {
         return !!this._children;
     }
