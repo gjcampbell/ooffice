@@ -20,8 +20,16 @@ app-root {
     box-shadow: 0 0 8px #0008 inset;
 }
 
-.page {
-    margin: auto;
-    padding: 0.5in 1in;
-    max-width: 11in;
+.markdown-body {
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 45px;
+}
+
+@media (max-width: 767px) {
+    .markdown-body {
+        padding: 15px;
+    }
 }

@@ -5,6 +5,27 @@ import { ReflectionType, Type, InferredType, IntrinsicType, Comment, Decorator }
 import { TypeSerializer } from 'typedoc/dist/lib/serialization';
 import { SourceReference } from 'typedoc/dist/lib/models/sources/file';
 
+function mdcode(type: string, code: string) {
+    return `\`\`\`${type}
+${code}
+\`\`\``;
+}
+
+function mdtrow(items: string[]) {
+    const values = items.map(v => v.replace(/\n/g, '<br />').replace(/\|/g, '\\|')),
+        result = values.length ? `| ${values.join(' | ')} |` : '';
+
+    return result;
+}
+
+function mdtable(header: string[], alignment: string[] | undefined, items: string[][]) {
+    const headerText = mdtrow(header),
+        headerUnderline = mdtrow(alignment || header.map(v => '---')),
+        text = items.map(v => mdtrow(v));
+
+    return [headerText, headerUnderline, ...text].filter(v => !!v).join('\r\n');
+}
+
 interface IMdFile {
     md: string;
     componentName: string;
@@ -34,9 +55,10 @@ ${this.createClasses()}
 
     private createClasses() {
         return this.join(
-            this.project.getReflectionsByKind(ReflectionKind.Class).filter(cls => cls.flags.isExported) ,
+            this.project.getReflectionsByKind(ReflectionKind.Class).filter(cls => cls.flags.isExported),
             (cls: DeclarationReflection) => {
-                return cls.decorators && cls.decorators.find(d => d.name === 'Component') ? this.createComponent(<any>cls)
+                return cls.decorators && cls.decorators.find(d => d.name === 'Component')
+                    ? this.createComponent(<any>cls)
                     : this.createClass(<any>cls);
             }
         );
@@ -44,59 +66,55 @@ ${this.createClasses()}
 
     private createProperties(clsName: string, properties: DeclarationReflection[]) {
         return this.section(
-            clsName +
-                ` Properties
-| Name | Type | Readonly | Notes |
-|---|---|:---:|---|`,
-            this.join(
-                properties.filter(p => p.flags.isPublic),
-                p => {
-                    return p.kind === ReflectionKind.Accessor
-                        ? this.createGetter(p)
-                        : p.kind === ReflectionKind.Property
-                        ? this.createProperty(p)
-                        : '';
-                }
+            clsName + ' Properties',
+            mdtable(
+                ['Name', 'Type', 'Readonly', 'Notes'],
+                ['---', '---', ':---:', '---'],
+                properties
+                    .filter(p => p.flags.isPublic)
+                    .map(p =>
+                        p.kind === ReflectionKind.Accessor
+                            ? this.createGetter(p)
+                            : p.kind === ReflectionKind.Property
+                            ? this.createProperty(p)
+                            : []
+                    )
             )
         );
     }
 
     private createComponent(cls: DeclarationReflection & { kind: ReflectionKind.ClassOrInterface }) {
-        const selector = cls.name.replace(/([A-Z])/g, l => `-${l.toLowerCase()}`).replace('-component', '').substring(1),
-            ml = !selector ? '' : `
-\`\`\`html
-<${selector} ${this.createBindings(cls)}></${selector}>
-\`\`\``;
+        const selector = cls.name
+                .replace(/([A-Z])/g, l => `-${l.toLowerCase()}`)
+                .replace('-component', '')
+                .substring(1),
+            ml = !selector ? '' : mdcode('html', `<${selector} ${this.createBindings(cls)}></${selector}>`);
 
         return `
 
-# component \`${cls.name}\` \{#${this.getId(<any>cls)}\}
+# component \`${cls.name}\`
 
 ${ml}
 
 ${this.createProperties(cls.name, cls.getChildrenByKind(ReflectionKind.Property | ReflectionKind.Accessor))}
 ${this.createMethods(cls.name, cls.getChildrenByKind(ReflectionKind.Method))}
-        `
+        `;
     }
 
     private createClass(cls: DeclarationReflection & { kind: ReflectionKind.ClassOrInterface }) {
         return `
 
-# class \`${cls.name}\` \{#${this.getId(<any>cls)}\}
+# class \`${cls.name}\`
 
 ${this.createProperties(cls.name, cls.getChildrenByKind(ReflectionKind.Property | ReflectionKind.Accessor))}
 ${this.createMethods(cls.name, cls.getChildrenByKind(ReflectionKind.Method))}
-        `
+        `;
     }
 
     private createGetter(p: DeclarationReflection) {
         const getter = p.getSignature,
-            isreadonly = !p.setSignature ? '🔒' : '';
-        return !getter
-            ? ''
-            : `| ${p.name} | ${getter.type.toString().replace(/\|/g, '\\|')} | ${isreadonly} | ${this.createComment(p.comment)} ${this.link(
-                  p.sources
-              )} |`;
+            isreadonly = !p.setSignature ? 'Y' : 'N';
+        return !getter ? [] : [this.link(p.sources, p.name), getter.type.toString(), isreadonly, this.createComment(p.comment)];
     }
 
     private createBindings(cls: DeclarationReflection) {
@@ -114,7 +132,10 @@ ${this.createMethods(cls.name, cls.getChildrenByKind(ReflectionKind.Method))}
                     decorator = input || output;
 
                 if (decorator) {
-                    const name = decorator.arguments && decorator.arguments.bindingPropertyName ? decorator.arguments.bindingPropertyName : item.name,
+                    const name =
+                            decorator.arguments && decorator.arguments.bindingPropertyName
+                                ? decorator.arguments.bindingPropertyName
+                                : item.name,
                         format = input ? `[${name}]` : `(${name})`;
                     result.push(format);
                 }
@@ -125,21 +146,19 @@ ${this.createMethods(cls.name, cls.getChildrenByKind(ReflectionKind.Method))}
     }
 
     private createProperty(p: DeclarationReflection) {
-        return `| ${p.name} | ${p.type.toString().replace(/\|/g, '\\|')} |  | ${this.link(p.sources)} ${this.createComment(p.comment)}|`;
+        return [this.link(p.sources, p.name), p.type.toString(), '', this.createComment(p.comment)];
     }
 
     private createMethods(clsName: string, methods: DeclarationReflection[]) {
         return this.section(
-            clsName +
-                ` Methods
-| Name | Signature | Notes |
-|---|---|---|`,
-            this.join(
-                [].concat(...methods.filter(m => m.flags.isPublic).map(m => ({ method: m, sig: m.signatures[0] }))),
-                m =>
-                    `| ${m.sig.name} | ${m.sig.toString().replace(/\|/g, '\\|')} | ${this.createComment(m.sig.comment)} ${this.link(
-                        m.method.sources
-                    )} |`
+            clsName + ' Methods',
+            mdtable(
+                ['Name', 'Signature', 'Notes'],
+                undefined,
+                methods
+                    .filter(m => m.flags.isPublic)
+                    .map(m => ({ method: m, sig: m.signatures[0] }))
+                    .map(m => [this.link(m.sig.sources, m.sig.name), m.sig.toStringHierarchy(), this.createComment(m.sig.comment)])
             )
         );
     }
@@ -163,18 +182,23 @@ ${content}
         return results.join(separator);
     }
 
+    private createType(item: { type: Type }) {
+        //return item.type.
+    }
+
     private getId(cls: DeclarationReflection & { kind: ReflectionKind.ClassOrInterface }) {
         return cls.name.toLocaleLowerCase();
     }
 
-    private link(sources: SourceReference[]) {
+    private link(sources: SourceReference[], text?: string) {
         const source = sources && sources.length ? sources[0] : null,
             path = source ? source.fileName : null,
+            linkText = text || '📃',
             line = source ? `#L${source.line}` : '';
 
         return !path
             ? ''
-            : `[📃](https://github.com/gjcampbell/ooffice/blob/master/projects/${this.projectName}/src/${path}${line} "go to source")`;
+            : `[${linkText}](https://github.com/gjcampbell/ooffice/blob/master/projects/${this.projectName}/src/${path}${line} "go to source")`;
     }
 }
 
