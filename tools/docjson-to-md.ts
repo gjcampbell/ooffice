@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, writeFileSync } from 'fs';
 import { resolve, basename } from 'path';
 import { Application, ProjectReflection, ReflectionKind, DeclarationReflection } from 'typedoc';
-import { ReflectionType, Type, InferredType, IntrinsicType, Comment } from 'typedoc/dist/lib/models';
+import { ReflectionType, Type, InferredType, IntrinsicType, Comment, Decorator } from 'typedoc/dist/lib/models';
 import { TypeSerializer } from 'typedoc/dist/lib/serialization';
 import { SourceReference } from 'typedoc/dist/lib/models/sources/file';
 
@@ -34,14 +34,11 @@ ${this.createClasses()}
 
     private createClasses() {
         return this.join(
-            this.project.getReflectionsByKind(ReflectionKind.Class).filter(cls => cls.flags.isExported),
-            (cls: DeclarationReflection) => `
-
-# class \`${cls.name}\`
-
-${this.createProperties(cls.name, cls.getChildrenByKind(ReflectionKind.Property | ReflectionKind.Accessor))}
-${this.createMethods(cls.name, cls.getChildrenByKind(ReflectionKind.Method))}
-        `
+            this.project.getReflectionsByKind(ReflectionKind.Class).filter(cls => cls.flags.isExported) ,
+            (cls: DeclarationReflection) => {
+                return cls.decorators && cls.decorators.find(d => d.name === 'Component') ? this.createComponent(<any>cls)
+                    : this.createClass(<any>cls);
+            }
         );
     }
 
@@ -64,6 +61,34 @@ ${this.createMethods(cls.name, cls.getChildrenByKind(ReflectionKind.Method))}
         );
     }
 
+    private createComponent(cls: DeclarationReflection & { kind: ReflectionKind.ClassOrInterface }) {
+        const selector = cls.name.replace(/([A-Z])/g, l => `-${l.toLowerCase()}`).replace('-component', '').substring(1),
+            ml = !selector ? '' : `
+\`\`\`html
+<${selector} ${this.createBindings(cls)}></${selector}>
+\`\`\``;
+
+        return `
+
+# component \`${cls.name}\` \{#${this.getId(<any>cls)}\}
+
+${ml}
+
+${this.createProperties(cls.name, cls.getChildrenByKind(ReflectionKind.Property | ReflectionKind.Accessor))}
+${this.createMethods(cls.name, cls.getChildrenByKind(ReflectionKind.Method))}
+        `
+    }
+
+    private createClass(cls: DeclarationReflection & { kind: ReflectionKind.ClassOrInterface }) {
+        return `
+
+# class \`${cls.name}\` \{#${this.getId(<any>cls)}\}
+
+${this.createProperties(cls.name, cls.getChildrenByKind(ReflectionKind.Property | ReflectionKind.Accessor))}
+${this.createMethods(cls.name, cls.getChildrenByKind(ReflectionKind.Method))}
+        `
+    }
+
     private createGetter(p: DeclarationReflection) {
         const getter = p.getSignature,
             isreadonly = !p.setSignature ? '🔒' : '';
@@ -72,6 +97,31 @@ ${this.createMethods(cls.name, cls.getChildrenByKind(ReflectionKind.Method))}
             : `| ${p.name} | ${getter.type.toString().replace(/\|/g, '\\|')} | ${isreadonly} | ${this.createComment(p.comment)} ${this.link(
                   p.sources
               )} |`;
+    }
+
+    private createBindings(cls: DeclarationReflection) {
+        const bindings = this.getBindings(cls);
+        return bindings.join(' ');
+    }
+
+    private getBindings(cls: DeclarationReflection) {
+        const result: string[] = [];
+
+        for (const item of cls.children) {
+            if (item.decorators) {
+                const input = item.decorators.find(d => d.name === 'Input'),
+                    output = item.decorators.find(d => d.name === 'Output'),
+                    decorator = input || output;
+
+                if (decorator) {
+                    const name = decorator.arguments && decorator.arguments.bindingPropertyName ? decorator.arguments.bindingPropertyName : item.name,
+                        format = input ? `[${name}]` : `(${name})`;
+                    result.push(format);
+                }
+            }
+        }
+
+        return result;
     }
 
     private createProperty(p: DeclarationReflection) {
@@ -111,6 +161,10 @@ ${content}
         const results = items.map(o => generator(o));
 
         return results.join(separator);
+    }
+
+    private getId(cls: DeclarationReflection & { kind: ReflectionKind.ClassOrInterface }) {
+        return cls.name.toLocaleLowerCase();
     }
 
     private link(sources: SourceReference[]) {
