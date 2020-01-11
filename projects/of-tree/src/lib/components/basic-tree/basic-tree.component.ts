@@ -75,44 +75,80 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
     } as VtBasicTreeConfig<any>;
     private hostBox?: ClientRect;
 
+    /**
+     * @ignore
+     */
     @ViewChild(OfVirtualTreeComponent)
     public tree!: OfVirtualTreeComponent;
 
+    /**
+     * Fires on change of the selected item, [selection]
+     */
     @Output()
     public selectionChange = new EventEmitter<any>();
 
+    /**
+     * ContextMenu event on tree rows, allows custom right-click menus
+     */
     @Output()
     public itemContextMenu = new EventEmitter<{ event: MouseEvent; item: any }>();
 
+    /**
+     * Click event that fires on click of the icon portion of a tree row
+     */
     @Output()
     public iconClick = new EventEmitter<{ event: MouseEvent; item: any }>();
 
+    /**
+     * Click event that fires on click of the label portion of a tree row
+     */
     @Output()
     public labelClick = new EventEmitter<{ event: MouseEvent; item: any }>();
 
+    /**
+     * Click event that fires on click of any part of a tree row
+     */
     @Output()
     public rowClick = new EventEmitter<{ event: MouseEvent; item: any }>();
 
+    /**
+     * Height in pixels of each row in the tree
+     */
     @Input()
     public itemHeight: number;
 
+    /**
+     * @ignore
+     */
     public isDraggingOver = false;
 
+    /**
+     * @ignore
+     */
     @ViewChild('dragOverlay')
     public dragOverlay?: ElementRef<HTMLDivElement>;
 
     private childAccessor = (item: any) => item.children;
 
+    /**
+     * Allows applying an arbitrary filter to the tree. This overrides filterText
+     */
     @Input()
     public set filter(value: ((item: any) => boolean) | undefined) {
         this.model.setFilter(value);
     }
 
+    /**
+     * Filter the tree with default text filter, case insenstive contains on item names
+     */
     @Input()
     public set filterText(value: string | undefined) {
         this.handleFilterTextChange(value);
     }
 
+    /**
+     * The config for the tree
+     */
     @Input()
     public set config(value: Partial<VtBasicTreeConfig<any>>) {
         this.childAccessor = value.childAccessor || this.childAccessor;
@@ -123,10 +159,16 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
         return this._config;
     }
 
+    /**
+     * returns true if filterText or a filter function is applied
+     */
     public get isFiltered() {
         return this.model.isFiltered();
     }
 
+    /**
+     * Get the current model or set a custom model for the tree
+     */
     @Input()
     public set model(value: OfVirtualTree<any>) {
         this._model = value;
@@ -136,11 +178,17 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
         return this._model;
     }
 
+    /**
+     * Input for loading data into the tree
+     */
     @Input()
     public set data(items: any[]) {
         this.model.load(items);
     }
 
+    /**
+     * Input for the selected item
+     */
     @Input()
     public set selection(value: any) {
         if (!this.model.isSelected(value)) {
@@ -166,42 +214,55 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
         this.disposeSubscriptions();
     }
 
+    /** @ignore */
     public handleContextMenu(evt: MouseEvent, item: any) {
         this.itemContextMenu.emit({ event: evt, item });
     }
 
+    /** @ignore */
     public handleRowClick(evt: MouseEvent, item: any) {
         this.model.selectAndHighlight(item);
         this.rowClick.emit({ event: evt, item });
     }
 
+    /**
+     * Scrolls and expands nodes so that the selected item is visible in the tree
+     */
     public navigateToSelection() {
         this.model.expandToSelectedItem();
         return this.tree.scrollToSelected();
     }
 
+    /**
+     * Scrolls and expands nodes so that the passed item is visible in the tree
+     */
     public navigateToItem(item: any) {
         this.model.expandToItem(item);
         return this.tree.scrollToItem(item);
     }
 
+    /** @ignore */
     public getIcon(node: Node<any>) {
         return `of-icon ${this.config.getIcon!(node.item, node, this.stateProvider)}`;
     }
 
+    /** @ignore */
     public getDomNodeAttr(node: Node<any>) {
         return this.config.getDomNodeAttr ? this.config.getDomNodeAttr(node.item, node, this.stateProvider) : undefined;
     }
 
+    /** @ignore */
     public getName(item: any) {
         return this.config.getName!(item, this.stateProvider) || '';
     }
 
+    /** @ignore */
     public getExpanderIcon(item: any) {
         const iconType = this.model.isExpanded(item) ? 'down' : 'right';
         return `of-expander of-expander-${iconType}`;
     }
 
+    /** @ignore */
     public handleDragstart(evt: DragEvent, node: Node<any>) {
         this.ownDragItem = node;
         if (this.canDrag(node.item)) {
@@ -213,6 +274,7 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
         }
     }
 
+    /** @ignore */
     @HostListener('dragover', ['$event'])
     public handleDragover(evt: DragEvent) {
         this.isDraggingOver = true;
@@ -228,11 +290,13 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
         }
     }
 
+    /** @ignore */
     @HostListener('dragleave')
     public handleDragleave() {
         this.isDraggingOver = false;
     }
 
+    /** @ignore */
     @HostListener('drop', ['$event'])
     public handleDrop(evt: DragEvent) {
         this.isDraggingOver = false;
@@ -244,6 +308,7 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
         }
     }
 
+    /** @ignore */
     public canDrag(item: any) {
         return this.config.canDrag!(item);
     }

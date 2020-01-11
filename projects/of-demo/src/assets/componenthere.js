@@ -42,5 +42,5 @@
         }
     ]);
 
-    const converter = new showdown.Converter({ extensions: ['ng', 'prettify'] });
+    const converter = new showdown.Converter({ tables: true, extensions: ['ng', 'prettify'] });
 })(window, showdown);

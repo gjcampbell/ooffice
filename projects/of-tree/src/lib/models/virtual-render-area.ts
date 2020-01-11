@@ -1,3 +1,6 @@
+/**
+ * Simple calculator for a virtual render area
+ */
 export class VirtualRenderArea {
     private _scrollPos = 0;
     private _viewerHeight = 0;
