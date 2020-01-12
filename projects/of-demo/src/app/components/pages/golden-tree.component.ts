@@ -13,6 +13,7 @@ import { AppSettingsService } from '../../services/AppSettingsService';
             <div class="col-3"></div>
         </div>
         <div class="tree-container">
+            <app-loading [show]="loading">downloading a bunch of data</app-loading>
             <of-virtual-tree [itemHeight]="25" [model]="treeModel">
                 <ng-template let-node>
                     <div class="tree-item" [class.app-highlight]="treeModel.isHighlighted(node.item)">
