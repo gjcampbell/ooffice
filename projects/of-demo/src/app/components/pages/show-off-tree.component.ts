@@ -15,6 +15,7 @@ import { AppSettingsService } from '../../services/AppSettingsService';
                 <input type="search" [(ngModel)]="filterText" />
             </div>
             <div class="tree-container">
+                <app-loading [show]="loading">downloading a bunch of data</app-loading>
                 <of-basic-tree #tree [config]="config" [filterText]="filterText" [(selection)]="selected" [data]="treeData"></of-basic-tree>
             </div>
             <p>Selected Path: {{ getPath(tree.model.getTreeNode(selected)) }}</p>
