@@ -2,23 +2,82 @@ import { Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, OnDes
 import { OfVirtualTree, OfTreeConfig, OfVirtualTreeComponent } from '../virtual-tree';
 import { Node } from '../../models';
 
+/**
+ * State accessor providing behavior state given a data item
+ */
 export interface VtItemState<T> {
+    /**
+     * True if the passed item is expanded
+     */
     isExpanded: (item: T) => boolean;
+    /**
+     * True if the passed item is selected
+     */
     isSelected: (item: T) => boolean;
+    /**
+     * True if the passed item is highlighted
+     */
     isHighlighted: (item: T) => boolean;
+    /**
+     * True if the passed item is loading its children
+     */
     isLoading: (item: any) => boolean;
 }
 
+/**
+ * Configuration options for the VtBasicTree
+ */
 export interface VtBasicTreeConfig<T> extends OfTreeConfig<T> {
+    /**
+     * Number of milliseconds to wait before applying the after change of input [filterText] or [filter] handler
+     */
     filterThrottle: number;
+    /**
+     * Minimum number of characters permitted for applying [filterText] filter
+     */
     filterTextMinLength: number;
+    /**
+     * Icon to use for non-folder nodes. This is overidden by the getIcon option
+     */
     itemIcon: string;
+    /**
+     * Handler for customizing the item icon. The returned string will be applied as a class on the template's i tag
+     * For example, if your project uses font awesome you might return 'fa fa-file-o'
+     * @param item The data item which the icon should represent
+     * @param node The node for the data item
+     * @param state State accessor for the item, used to customize icon based on expanded, loading, selected, or highlighted state
+     */
     getIcon(item: T, node: Node<T>, state: VtItemState<T>): string;
+    /**
+     * Handler for customizing the label for tree nodes. The returned string will be used as the node text for the passed item
+     * @param item The data item which the text should represent
+     * @param state State accessor for the item, exposing the item's expanded, loading, selected, or highlighted state
+     */
     getName(item: T, state: VtItemState<T>): string;
+    /**
+     * @ignore
+     */
     getDomNodeAttr(item: T, node: Node<T>, state: VtItemState<T>): { [attr: string]: any } | undefined;
+    /**
+     * Determines whether the passed item should be draggable. Return true if the item is draggable
+     * @param item The data item for which draggability should be returned
+     */
     canDrag(item: T): boolean;
+    /**
+     * Determines whether the a drop should be allowed. Return true to allow drop
+     * @param args Parameters of the drag event
+     */
     canDrop(args: DragArgs<T>): boolean;
+    /**
+     * Handler for executing a move event. Perform update to your data based on the passed drag event data.
+     * Return a promise that is resolved when your data is updated
+     * @param args Parameters of the drag event
+     */
     move(args: DragArgs<T>): Promise<void>;
+    /**
+     * For cross-window drag handling, provide data accessible to the drop target
+     * @param item
+     */
     getDragData(item: T): string;
 }
 
@@ -30,11 +89,29 @@ export enum DefaultIcons {
 
 type DragPos = 'before' | 'on' | 'after';
 
+/**
+ * Parameters of a drag handlers (move, canDrop)
+ */
 interface DragArgs<T> {
+    /**
+     * The node being dragged
+     */
     itemNode?: Node<T>;
+    /**
+     * The node being dragged over or dropped on
+     */
     parentNode: Node<T>;
+    /**
+     * The data item being dragged
+     */
     item: T | any;
+    /**
+     * The data item being dragged over or dropped on
+     */
     parent?: T;
+    /**
+     * The index within the parent node where the item should be dropped
+     */
     index?: number;
 }
 
@@ -61,7 +138,11 @@ export class OfBasicTreeComponent implements AfterViewInit, OnDestroy {
     private _config = {
         childAccessor: (item: any) => this.getChildren(item),
         getIcon: (item: any) =>
-            (item.type !== 'd' && item.type !== 'Folder') ? item.icon || this.config.itemIcon : this.model.isExpanded(item) ? DefaultIcons.folderOpen : DefaultIcons.folder,
+            item.type !== 'd' && item.type !== 'Folder'
+                ? item.icon || this.config.itemIcon
+                : this.model.isExpanded(item)
+                ? DefaultIcons.folderOpen
+                : DefaultIcons.folder,
         getName: (item: any) => item.name,
         getDomNodeAttr: () => undefined,
         itemIcon: DefaultIcons.file,

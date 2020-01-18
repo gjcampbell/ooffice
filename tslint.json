@@ -35,7 +35,7 @@
         "no-eval": true,
         "no-inferrable-types": false,
         "no-misused-new": true,
-        "no-non-null-assertion": true,
+        "no-non-null-assertion": false,
         "no-redundant-jsdoc": true,
         "no-shadowed-variable": true,
         "no-string-literal": false,
